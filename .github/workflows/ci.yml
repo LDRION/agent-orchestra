@@ -1,0 +1,63 @@
+# Проверки на каждый push и PR. Действия закреплены по SHA коммита (тег можно перевесить, SHA — нет);
+# обновляет их Dependabot. Права токена — только чтение.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  server:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.13"
+      - name: Зависимости (точные версии)
+        run: |
+          pip install -c requirements.txt -e ".[dev]"
+          pip install bandit==1.9.4 pip-audit==2.10.1
+      - name: Тесты
+        run: python -m pytest -q
+      - name: Статический анализ безопасности
+        run: bandit -q -r orchestra -ll
+      - name: Уязвимости зависимостей
+        run: pip-audit -r requirements.txt --no-deps --disable-pip
+
+  web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+      - run: npm ci --no-fund
+      - run: npm run typecheck
+      - run: npm run build
+      - name: Уязвимости зависимостей
+        run: npm audit --omit=dev --audit-level=moderate

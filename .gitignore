@@ -1,0 +1,38 @@
+# Секреты — никогда в git
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+build/
+dist/
+
+# Node
+node_modules/
+web/dist/
+*.tsbuildinfo
+
+# Рантайм: БД, мастер-ключ, журналы, кэш моделей
+data/
+server/data/
+*.db
+*.sqlite
+*.sqlite3
+*.log
+
+# IDE / OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

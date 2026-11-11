@@ -1,0 +1,72 @@
+# Оркестр · AI на сервере компании: PostgreSQL + приложение + Caddy (TLS).
+# Подготовка — deploy/README.md. Секреты лежат в deploy/secrets/ и deploy/.env (оба вне git).
+name: agent-orchestra
+
+services:
+  db:
+    image: postgres:17-alpine@sha256:266d3c257594e195b309ae9d1805e54c788f1d7b375f56bf6c367aac6c917e7b
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: orchestra
+      POSTGRES_USER: orchestra
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?задайте DB_PASSWORD в deploy/.env}
+    volumes: [pgdata:/var/lib/postgresql/data]
+    networks: [data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U orchestra -d orchestra"]
+      interval: 10s
+      retries: 6
+
+  app:
+    build: { context: .., dockerfile: deploy/Dockerfile }
+    restart: unless-stopped
+    depends_on: { db: { condition: service_healthy } }
+    environment:
+      ORCHESTRA_PUBLIC_URL: https://${ORCHESTRA_DOMAIN:?задайте ORCHESTRA_DOMAIN в deploy/.env}
+      ORCHESTRA_DATABASE_URL: postgresql+asyncpg://orchestra:${DB_PASSWORD}@db:5432/orchestra
+      ORCHESTRA_MASTER_KEY_FILE: /run/secrets/master_key
+      ORCHESTRA_SETUP_TOKEN: ${ORCHESTRA_SETUP_TOKEN:-}
+      ORCHESTRA_TRUSTED_PROXIES: 172.31.250.10  # X-Forwarded-For — только от Caddy (его фиксированный адрес в сети front)
+      ORCHESTRA_ALLOWED_NETWORKS: ${ORCHESTRA_ALLOWED_NETWORKS:-}    # сети офиса и VPN; пусто — без ограничения
+      ORCHESTRA_HOOK_NETWORKS: ${ORCHESTRA_HOOK_NETWORKS:-}          # откуда принимать вебхуки
+    secrets: [master_key]
+    volumes: [appdata:/data]
+    # data — к БД, front — от Caddy, egress — только исходящие (облачные модели); портов наружу нет
+    networks: [data, front, egress]
+    extra_hosts: ["host.docker.internal:host-gateway"]     # Ollama на этом же сервере
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+
+  caddy:
+    image: caddy:2-alpine@sha256:eb4d35b7452d1ab6171fbdbe8d9275b2301dad6dad92115d91e19fb9b24d510f
+    restart: unless-stopped
+    depends_on: [app]
+    ports: ["80:80", "443:443"]
+    environment:
+      ORCHESTRA_DOMAIN: ${ORCHESTRA_DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+    # public — порты 80/443 и выпуск сертификата; front — к приложению. До БД Caddy не дотянется
+    networks:
+      public: {}
+      front: { ipv4_address: 172.31.250.10 }
+
+secrets:
+  master_key:
+    file: ./secrets/master_key
+
+volumes:
+  pgdata:
+  appdata:
+  caddy_data:
+
+networks:
+  data: { internal: true }                # приложение ↔ БД; наружу не выходит
+  front:                                  # Caddy ↔ приложение; адрес Caddy фиксирован — ему одному верим X-Forwarded-For
+    internal: true
+    ipam: { config: [{ subnet: 172.31.250.0/28 }] }
+  egress: {}                              # исходящие приложения (облачные модели, интеграции); Caddy здесь нет
+  public: {}                              # Caddy: порты наружу и ACME

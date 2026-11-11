@@ -1,0 +1,6 @@
+# Единые переводы строк (LF) — иначе правки на Windows превращают дифф в «изменён весь файл»
+* text=auto eol=lf
+*.vbs binary
+*.ps1 text eol=crlf
+*.woff2 binary
+*.png binary

@@ -1,0 +1,18 @@
+{$ORCHESTRA_DOMAIN} {
+	# Внутренний домен без публичного DNS — раскомментируйте: сертификат от собственного CA Caddy
+	# tls internal
+	encode zstd gzip
+	reverse_proxy app:8710 {
+		flush_interval -1          # SSE: события задачи без буферизации
+	}
+	header -Server
+	# Только сети компании — остальным 403 ещё до приложения (вебхуки — отдельно):
+	# @outside {
+	# 	not remote_ip 10.0.0.0/8 192.168.0.0/16
+	# 	not path /api/hooks/*
+	# }
+	# respond @outside 403
+	request_body {
+		max_size 17MB              # загрузка документов в базу знаний — до 16 МБ
+	}
+}

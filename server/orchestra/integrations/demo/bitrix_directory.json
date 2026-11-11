@@ -1,0 +1,33 @@
+{
+  "_note": "Вымышленный справочник для прототипа. bitrix_* — id в демо-портале Bitrix24.",
+  "projects": [
+    {"id": "P-101", "name": "ЖК «Северная Звезда»", "aliases": ["Северная Звезда", "СЗ"], "stage": "РД благоустройства", "lead": "E-01", "bitrix_group_id": 12},
+    {"id": "P-102", "name": "Парк «Речной берег»", "aliases": ["Речной берег"], "stage": "Концепция", "lead": "E-06", "bitrix_group_id": 14},
+    {"id": "P-103", "name": "Сквер на Лесной улице", "aliases": ["сквер на Лесной", "Лесная", "Лесной сквер"], "stage": "Реализация, авторский надзор", "lead": "E-12", "bitrix_group_id": 15},
+    {"id": "P-104", "name": "ЖК «Солнечный город»", "aliases": ["Солнечный город", "Солнечный"], "stage": "ПД благоустройства", "lead": "E-01", "bitrix_group_id": 16},
+    {"id": "P-105", "name": "Общественное пространство «Депо»", "aliases": ["Депо"], "stage": "Пауза", "lead": "E-06", "bitrix_group_id": 17}
+  ],
+  "departments": [
+    {"id": "D-ARCH", "name": "Архитектурная мастерская", "aliases": ["мастерская", "архитекторы"], "head": "E-06"},
+    {"id": "D-LAND", "name": "Ландшафтный отдел", "aliases": ["ландшафтный отдел", "ландшафтники", "отдел ландшафта"], "head": "E-04"},
+    {"id": "D-BIM", "name": "Отдел BIM", "aliases": ["отдел BIM", "BIM-отдел", "бимщики"], "head": "E-09"},
+    {"id": "D-ENG", "name": "Инженерный отдел", "aliases": ["инженерный отдел", "инженеры", "сетевики"], "head": "E-05"},
+    {"id": "D-EST", "name": "Сметный отдел", "aliases": ["сметный отдел", "сметчики"], "head": "E-08"},
+    {"id": "D-VIZ", "name": "Группа визуализации", "aliases": ["группа визуализации", "визуализаторы"], "head": "E-07"},
+    {"id": "D-LAW", "name": "Договорной отдел", "aliases": ["договорной отдел", "юристы"], "head": "E-10"}
+  ],
+  "employees": [
+    {"id": "E-01", "last_name": "Иванов", "first_name": "Алексей", "middle_name": "Сергеевич", "role": "Главный инженер проекта (ГИП)", "department": "D-ARCH", "bitrix_user_id": 11},
+    {"id": "E-02", "last_name": "Петрова", "first_name": "Мария", "middle_name": "Андреевна", "role": "Ландшафтный архитектор", "department": "D-LAND", "bitrix_user_id": 12},
+    {"id": "E-03", "last_name": "Кузнецов", "first_name": "Андрей", "middle_name": "Игоревич", "role": "BIM-моделлер", "department": "D-BIM", "bitrix_user_id": 13},
+    {"id": "E-04", "last_name": "Соколова", "first_name": "Елена", "middle_name": "Викторовна", "role": "Руководитель ландшафтного отдела", "department": "D-LAND", "bitrix_user_id": 14},
+    {"id": "E-05", "last_name": "Морозов", "first_name": "Игорь", "middle_name": "Петрович", "role": "Руководитель инженерного отдела", "department": "D-ENG", "bitrix_user_id": 15},
+    {"id": "E-06", "last_name": "Волкова", "first_name": "Ольга", "middle_name": "Николаевна", "role": "Главный архитектор проекта (ГАП)", "department": "D-ARCH", "bitrix_user_id": 16},
+    {"id": "E-07", "last_name": "Лебедев", "first_name": "Никита", "middle_name": "Олегович", "role": "Визуализатор", "department": "D-VIZ", "bitrix_user_id": 17},
+    {"id": "E-08", "last_name": "Кузнецов", "first_name": "Павел", "middle_name": "Дмитриевич", "role": "Руководитель сметного отдела", "department": "D-EST", "bitrix_user_id": 18},
+    {"id": "E-09", "last_name": "Фёдоров", "first_name": "Сергей", "middle_name": "Ильич", "role": "Руководитель отдела BIM", "department": "D-BIM", "bitrix_user_id": 19},
+    {"id": "E-10", "last_name": "Новикова", "first_name": "Татьяна", "middle_name": "Юрьевна", "role": "Юрист", "department": "D-LAW", "bitrix_user_id": 20},
+    {"id": "E-11", "last_name": "Смирнов", "first_name": "Илья", "middle_name": "Александрович", "role": "Инженер наружных сетей", "department": "D-ENG", "bitrix_user_id": 21},
+    {"id": "E-12", "last_name": "Орлова", "first_name": "Анна", "middle_name": "Сергеевна", "role": "Менеджер проектов", "department": "D-ARCH", "bitrix_user_id": 22}
+  ]
+}

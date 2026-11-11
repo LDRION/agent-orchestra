@@ -1,0 +1,35 @@
+# Обновления — PR-ами, CI проверяет каждый. Мажорные версии (React 19, Vite 8, Node 26…) — только осознанно,
+# отдельной задачей: это переписывание, а не исправление. Исправления уязвимостей Dependabot присылает всегда.
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: /server
+    schedule: { interval: weekly }
+    open-pull-requests-limit: 5
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+  - package-ecosystem: npm
+    directory: /web
+    schedule: { interval: weekly }
+    open-pull-requests-limit: 5
+    groups:
+      web-minor: { update-types: ["minor", "patch"] }
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+  - package-ecosystem: docker
+    directory: /deploy
+    schedule: { interval: weekly }
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+  - package-ecosystem: docker-compose
+    directory: /deploy
+    schedule: { interval: weekly }
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule: { interval: weekly }
