@@ -38,7 +38,7 @@ class SiberiProvider(ChatProvider):
     kind = "siberi"
     title = "Siberi AI"
     default_trust = "cloud_foreign"
-    default_base_url = "https://siberi.online/api/v1/ai"
+    default_base_url = "http://127.0.0.1:5005/api/v1/ai"  # свой сервер Siberi, см. github.com/LDRION/siberi
 
     def _auth(self) -> dict:
         return {"Authorization": f"Bearer {self.require_key()}"}

@@ -33,7 +33,7 @@ PRESETS = [
      "base_url": "https://api.openai.com/v1", "model": "",
      "settings": {"token_param": "max_completion_tokens", "temperature": False, "reasoning_effort": True}, "key": True},
     {"id": "siberi", "title": "Siberi AI", "kind": "siberi", "trust": "cloud_foreign",
-     "base_url": "https://siberi.online/api/v1/ai", "model": "siberi", "settings": {}, "key": True},
+     "base_url": "http://127.0.0.1:5005/api/v1/ai", "model": "siberi", "settings": {}, "key": True},
     {"id": "yandex", "title": "YandexGPT (OpenAI-совместимый)", "kind": "openai_compat", "trust": "cloud_ru",
      "base_url": "https://llm.api.cloud.yandex.net/v1", "model": "gpt://<folder_id>/yandexgpt/latest",
      "settings": {"auth_scheme": "Api-Key"}, "key": True},
