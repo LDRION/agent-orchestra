@@ -40,7 +40,7 @@ services:
     security_opt: ["no-new-privileges:true"]
 
   caddy:
-    image: caddy:2-alpine@sha256:eb4d35b7452d1ab6171fbdbe8d9275b2301dad6dad92115d91e19fb9b24d510f
+    image: caddy:2-alpine@sha256:78bd35025c7ba85961dd149ae670315129954e77abe2383ac47c89106b35ade9
     restart: unless-stopped
     depends_on: [app]
     ports: ["80:80", "443:443"]
